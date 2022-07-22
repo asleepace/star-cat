@@ -7,9 +7,14 @@ A simple scrolling game written in Rust!
 Start a local http server with the following command:
 
 ```bash
+wasm-pack build --target web
 cd www
+npm install
+npm run build
 npm run start
 ```
+
+now it should be running at http://localhost:8080!
 
 ## Building
 
@@ -17,6 +22,7 @@ Run the following command to create the WASM binary:
 
 ```bash
 wasm-pack build --target web
+cd www && npm run start
 ```
 
 ## Resources
