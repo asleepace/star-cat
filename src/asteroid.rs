@@ -27,7 +27,7 @@ impl Asteroid {
         }
     }
 
-    pub fn update(&mut self, speed: f32, delta: f32) {
+    pub fn update(&mut self, speed: &f32, delta: &f32) {
         self.rect.y += speed * delta;
         if self.rect.y > screen_height() + ASTEROID_SIZE {
             self.rect.x = rand::gen_range(0f32, screen_width());

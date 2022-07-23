@@ -27,7 +27,7 @@ impl BackgroundStar {
         }
     }
 
-    pub fn update(&mut self, speed: f32, delta: f32) {
+    pub fn update(&mut self, speed: &f32, delta: &f32) {
         self.rect.y += self.speed + speed * delta;
         if self.rect.bottom() > screen_height() {
             self.rect = random_position();

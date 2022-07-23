@@ -1,33 +1,22 @@
 mod asteroid;
 mod background_star;
+mod games;
 mod player;
 mod star;
-use std::f32::consts::PI;
 
 use asteroid::Asteroid;
 use background_star::BackgroundStar;
+use games::Game;
 use macroquad::prelude::*;
-use macroquad_particles::{self as particles, AtlasConfig, BlendMode, Emitter, EmitterConfig};
+use macroquad_particles::{self as particles, Emitter, EmitterConfig};
 use player::Player;
 use star::Star;
-
 const GAME_SPEED: f32 = 200.0;
 
 fn smoke() -> particles::EmitterConfig {
     particles::EmitterConfig {
         lifetime: 1.2,
-        amount: 20,
-        initial_direction: vec2((270f32).sin(), (270f32).cos()),
-        initial_direction_spread: 0.8f32,
-        size: 2f32,
-        ..Default::default()
-    }
-}
-
-fn powerup() -> particles::EmitterConfig {
-    particles::EmitterConfig {
-        lifetime: 1.2,
-        amount: 20,
+        amount: 50,
         initial_direction: vec2((270f32).sin(), (270f32).cos()),
         initial_direction_spread: 0.8f32,
         size: 2f32,
@@ -61,6 +50,8 @@ enum GameState {
 
 #[macroquad::main("star-cat")]
 async fn main() {
+    let game = Game::new();
+
     // initialize and load graphical assets
     let font = load_ttf_font("res/VT323-Regular.ttf").await.unwrap();
     let cat: Texture2D = load_texture("res/cat_graphic.png").await.unwrap();
@@ -96,7 +87,7 @@ async fn main() {
         // clear background and paint background stars first
         clear_background(BLACK);
         for bg_star in background.iter_mut() {
-            bg_star.update(speed, get_frame_time());
+            bg_star.update(&speed, &frame_time);
         }
 
         // handle various game states
@@ -117,7 +108,11 @@ async fn main() {
                     print!("resting");
                 }
                 let y = screen_height() * 0.5f32;
-                display_text(&font, "GAME OVER", 80, 0f32, y);
+                let message = match player.did_win() {
+                    true => "YOU WON!",
+                    false => "GAME OVER",
+                };
+                display_text(&font, message, 80, 0f32, y);
                 display_text(
                     &font,
                     &format!("SCORE: {}", &next_score),
@@ -141,6 +136,10 @@ async fn main() {
                 }
             }
             GameState::Play => {
+                // output the score on the scren
+                let score_text = format!("SCORE: {}", prev_score);
+                display_text(&font, &score_text, 40, 0.0, 40.0);
+
                 // check win and loss conditions
                 match player.did_win() || player.did_lose() {
                     true => game_state = GameState::GameOver,
@@ -157,18 +156,19 @@ async fn main() {
                 if tick > 10f32 {
                     tick = 0f32;
                     next_score += 1f32;
+                    player.rect.y -= 1f32 * frame_time;
                 }
             }
             _ => {}
         };
 
         // update the player and powerup start
-        player.update(get_frame_time());
-        star.update(speed, get_frame_time());
+        player.update(&frame_time);
+        star.update(&speed, &frame_time);
 
         // check if the player touched the powerup
         if player.collision(&star.rect, false) {
-            speed += 50f32 * get_frame_time();
+            speed += 1f32;
             next_score += 100f32;
             player.powerup();
             star.powerup();
@@ -176,7 +176,7 @@ async fn main() {
 
         // check if player collided with an asteroid
         for asteroid in asteroids.iter_mut() {
-            asteroid.update(speed, get_frame_time());
+            asteroid.update(&speed, &frame_time);
             if player.collision(&asteroid.rect, true) {
                 //next_score += 1f32;
                 match player.rect.intersect(asteroid.rect) {
@@ -186,12 +186,9 @@ async fn main() {
             }
         }
 
+        // display the score during the game
         match game_state {
-            GameState::Play => {
-                // output the score on the scren
-                let score_text = format!("SCORE: {}", prev_score);
-                display_text(&font, &score_text, 40, 0.0, 40.0);
-            }
+            GameState::Play => {}
             _ => {}
         }
 

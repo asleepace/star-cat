@@ -2,6 +2,7 @@ use macroquad::prelude::*;
 
 const PLAYER_SIZE: f32 = 50f32;
 const ACCELERATION: f32 = 1.1f32;
+const DECAY: f32 = 1.01f32;
 const MAX_SPEED: f32 = 800f32;
 const MIN_SPEED: f32 = 200f32;
 const ONE: f32 = 1f32;
@@ -20,20 +21,6 @@ fn max(a: f32, b: f32) -> f32 {
     } else {
         b
     }
-}
-
-fn abs(a: f32) -> f32 {
-    if a < 0f32 {
-        a * -1f32
-    } else {
-        a
-    }
-}
-
-enum Accelerate {
-    Left,
-    Right,
-    Decay,
 }
 
 pub struct Player {
@@ -68,7 +55,7 @@ impl Player {
         self.draw();
     }
 
-    pub fn update(&mut self, delta: f32) {
+    pub fn update(&mut self, delta: &f32) {
         // check for user input and update speed and velocity
         let _ = match (is_key_down(KeyCode::Right), is_key_down(KeyCode::Left)) {
             (true, false) => {
@@ -79,11 +66,17 @@ impl Player {
                 self.speed *= 1f32 + ACCELERATION;
                 self.velocity = -1f32;
             }
+            (true, true) => {
+                self.speed *= 1f32 + ACCELERATION;
+                self.rect.y += ACCELERATION * delta;
+            }
             _ => {
                 // allows speed decay
-                self.speed /= ACCELERATION;
+                self.speed /= DECAY;
             }
         };
+
+        // allow player to slow down
 
         if self.did_lose() {
             return self.draw();
@@ -114,7 +107,7 @@ impl Player {
         match intersection.w > intersection.h {
             true => {
                 // bounce on y
-                self.rect.y -= to_signum.y * intersection.h;
+                self.rect.y -= to_signum.y * intersection.h * 2f32;
             }
             false => {
                 // bounce on x

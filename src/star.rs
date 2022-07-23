@@ -14,7 +14,7 @@ impl Star {
             rect: Rect::new(start_x, start_y, STAR_SIZE, STAR_SIZE),
         }
     }
-    pub fn update(&mut self, speed: f32, delta: f32) {
+    pub fn update(&mut self, speed: &f32, delta: &f32) {
         self.rect.y += speed * delta;
         if self.rect.bottom() > screen_height() {
             self.powerup();
