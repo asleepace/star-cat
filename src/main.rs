@@ -190,7 +190,7 @@ async fn main() {
                             1.2f32
                         };
                         flying_emitter_local.draw(vec2(rect.x, rect.y));
-                        asteroid.hit(direction, &frame_time);
+                        asteroid.hit(player.rect.x - asteroid.rect.x);
                     }
                     None => {}
                 }

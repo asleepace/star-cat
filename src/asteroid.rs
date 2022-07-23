@@ -30,7 +30,7 @@ impl Asteroid {
     }
 
     pub fn hit(&mut self, speed: f32) {
-        self.velocity -= speed;
+        self.velocity -= speed / self.size;
     }
 
     pub fn update(&mut self, speed: &f32, delta: &f32) {
