@@ -59,6 +59,15 @@ impl Player {
             image: texture,
         }
     }
+
+    pub fn reset(&mut self) {
+        self.rect.x = screen_width() * 0.5f32 - PLAYER_SIZE;
+        self.rect.y = screen_height() - 100f32;
+        self.speed = 200f32;
+        self.velocity = 0f32;
+        self.draw();
+    }
+
     pub fn update(&mut self, delta: f32) {
         // check for user input and update speed and velocity
         let _ = match (is_key_down(KeyCode::Right), is_key_down(KeyCode::Left)) {
@@ -72,9 +81,13 @@ impl Player {
             }
             _ => {
                 // allows speed decay
-                // self.speed /= ACCELERATION;
+                self.speed /= ACCELERATION;
             }
         };
+
+        if self.did_lose() {
+            return self.draw();
+        }
 
         // check speed boundries
         self.speed = max(self.speed, -MAX_SPEED);
@@ -114,6 +127,14 @@ impl Player {
         true
     }
 
+    pub fn did_lose(&mut self) -> bool {
+        self.rect.y > screen_height()
+    }
+
+    pub fn did_win(&mut self) -> bool {
+        self.rect.y <= 0.0
+    }
+
     pub fn powerup(&mut self) {
         self.rect.y -= self.speed * get_frame_time();
         self.draw();
@@ -123,27 +144,27 @@ impl Player {
         // draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BLUE);
         // draw_texture(self.image, self.rect.x, self.rect.y, WHITE);
 
-        draw_texture_ex(
-            self.image,
-            self.rect.x - 13f32,
-            self.rect.y - 6f32,
-            WHITE,
-            DrawTextureParams {
-                dest_size: Some(Vec2::new(75f32, 77.50f32)),
-                flip_x: false,
-                flip_y: false,
-                pivot: None,
-                source: None,
-                rotation: 0f32,
-            },
-        )
+        // draw_texture_ex(
+        //     self.image,
+        //     self.rect.x - 13f32,
+        //     self.rect.y - 6f32,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: Some(Vec2::new(75f32, 77.50f32)),
+        //         flip_x: false,
+        //         flip_y: false,
+        //         pivot: None,
+        //         source: None,
+        //         rotation: 0f32,
+        //     },
+        // )
 
-        // draw_circle(
-        //     self.rect.x + self.half,
-        //     self.rect.y + self.half,
-        //     self.half,
-        //     ORANGE,
-        // );
+        draw_circle(
+            self.rect.x + self.half,
+            self.rect.y + self.half,
+            self.half,
+            ORANGE,
+        );
         // draw_circle(
         //     self.rect.x + self.half + 8f32,
         //     self.rect.y + self.half - 10f32,
