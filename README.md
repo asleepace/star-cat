@@ -1,5 +1,7 @@
 # Start Cat
 
+<img width="798" alt="Screen Shot 2022-07-23 at 2 01 16 PM" src="https://user-images.githubusercontent.com/10716803/180623339-25af6d67-2598-4c78-8ccd-8bec13266720.png">
+
 A simple scrolling game written in Rust!
 
 ## Running
