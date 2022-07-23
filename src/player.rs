@@ -4,6 +4,7 @@ const PLAYER_SIZE: f32 = 50f32;
 const ACCELERATION: f32 = 1.1f32;
 const MAX_SPEED: f32 = 800f32;
 const MIN_SPEED: f32 = 200f32;
+const ONE: f32 = 1f32;
 
 fn min(a: f32, b: f32) -> f32 {
     if a < b {
@@ -57,26 +58,30 @@ impl Player {
         }
     }
     pub fn update(&mut self, delta: f32) {
-        if is_key_down(KeyCode::Right) {
-            self.speed *= 1f32 + ACCELERATION;
-            self.velocity = 1f32;
-        } else if is_key_down(KeyCode::Left) {
-            self.speed *= 1f32 + ACCELERATION;
-            self.velocity = -1f32;
-        } else {
-            self.speed /= ACCELERATION;
-        }
+        // check for user input and update speed and velocity
+        let _ = match (is_key_down(KeyCode::Right), is_key_down(KeyCode::Left)) {
+            (true, false) => {
+                self.speed *= 1f32 + ACCELERATION;
+                self.velocity = 1f32;
+            }
+            (false, true) => {
+                self.speed *= 1f32 + ACCELERATION;
+                self.velocity = -1f32;
+            }
+            _ => {
+                // allows speed decay
+                // self.speed /= ACCELERATION;
+            }
+        };
 
-        if self.speed > MAX_SPEED {
-            self.speed = MAX_SPEED;
-        } else if self.speed < -MAX_SPEED {
-            self.speed = -MAX_SPEED;
-        }
+        // check speed boundries
+        self.speed = max(self.speed, -MAX_SPEED);
+        self.speed = min(self.speed, MAX_SPEED);
 
+        // move the players x coordinate
         self.rect.x += self.speed * delta * self.velocity;
 
-        println!("{:?}", (self.speed));
-
+        // check screen boundries and draw
         self.rect.x = min(self.rect.x, screen_width() - self.rect.w);
         self.rect.x = max(self.rect.x, 0f32);
         self.draw();
