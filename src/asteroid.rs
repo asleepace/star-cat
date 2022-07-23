@@ -14,6 +14,8 @@ const VELOCITY_DECAY: f32 = 0.99999;
 const MAX_VELOCITY: f32 = 200.0;
 const ASTEROID_MIN_SIZE: f32 = 100.0;
 const ASTEROID_MAX_SIZE: f32 = 200.0;
+const MIN_EDGES: u8 = 12;
+const MAX_EDGES: u8 = 18;
 const SPIN_MIN: f32 = 0.0;
 const SPIN_MAX: f32 = 2.0 * PI;
 
@@ -30,14 +32,15 @@ fn get_textures(size: f32) -> Vec<Rect> {
 }
 
 pub fn get_random_asteroid(y: u32) -> Asteroid {
+    let offset = y as f32 * ASTEROID_MAX_SIZE;
     let size = rand::gen_range(ASTEROID_MIN_SIZE, ASTEROID_MAX_SIZE);
     let start_x = rand::gen_range(-size, screen_width());
-    let start_y = rand::gen_range(size, screen_height());
+    let start_y = rand::gen_range(size, screen_height()) + offset;
     Asteroid {
         color: Color::from_rgba(110u8, 67u8, 24u8, 255u8),
         rect: Rect::new(start_x, -start_y, size, size),
         spin: rand::gen_range(SPIN_MIN, SPIN_MAX),
-        side: rand::gen_range(10, 16),
+        side: rand::gen_range(MIN_EDGES, MAX_EDGES),
         velocity: rand::gen_range(-10f32, 10f32),
         texture: get_textures(size),
         size: size,
@@ -58,9 +61,6 @@ pub struct Asteroid {
 
 impl Asteroid {
     pub fn new(y: u32) -> Self {
-        let size = rand::gen_range(ASTEROID_MIN_SIZE, ASTEROID_MAX_SIZE);
-        let start_x = rand::gen_range(0f32, screen_width() - size);
-        let start_y = y as f32 * size * -2f32;
         let params = get_random_asteroid(y);
         return params;
     }
