@@ -28,6 +28,7 @@ impl Star {
         self.draw();
     }
     fn draw(&self) {
-        draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, WHITE)
+        draw_circle(self.rect.x, self.rect.y, 8f32, YELLOW);
+        //draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, YELLOW)
     }
 }
