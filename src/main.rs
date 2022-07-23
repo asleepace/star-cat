@@ -184,12 +184,7 @@ async fn main() {
                 //next_score += 1f32;
                 match player.rect.intersect(asteroid.rect) {
                     Some(rect) => {
-                        let direction = if player.rect.x < asteroid.rect.x {
-                            -1.2f32
-                        } else {
-                            1.2f32
-                        };
-                        flying_emitter_local.draw(vec2(rect.x, rect.y));
+                        flying_emitter_local.draw(vec2(rect.x, rect.y + player.rect.h * 0.5f32));
                         asteroid.hit(player.rect.x - asteroid.rect.x);
                     }
                     None => {}
