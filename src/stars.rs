@@ -1,7 +1,5 @@
 use macroquad::prelude::*;
 
-const STAR_SIZE: f32 = 10f32;
-
 fn random_position() -> Rect {
     Rect::new(
         rand::gen_range(0f32, screen_width()),
@@ -11,13 +9,13 @@ fn random_position() -> Rect {
     )
 }
 
-pub struct BackgroundStar {
+pub struct Star {
     pub rect: Rect,
     color: Color,
     speed: f32,
 }
 
-impl BackgroundStar {
+impl Star {
     pub fn new() -> Self {
         let pos = random_position();
         Self {
