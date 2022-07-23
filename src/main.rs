@@ -1,11 +1,9 @@
 mod asteroid;
-mod games;
 mod player;
 mod powerup;
 mod stars;
 
 use asteroid::Asteroid;
-use games::Game;
 use macroquad::prelude::*;
 use macroquad_particles::{self as particles, Emitter, EmitterConfig};
 use player::Player;
@@ -70,7 +68,7 @@ async fn main() {
     let mut tick = 0f32;
     let mut game_state: GameState = GameState::New;
 
-    let mut flying_emitter_local = Emitter::new(EmitterConfig {
+    let mut emitter = Emitter::new(EmitterConfig {
         local_coords: true,
         texture: Some(texture),
         ..smoke()
@@ -92,7 +90,7 @@ async fn main() {
         }
 
         // handle various game states
-        &match game_state {
+        match game_state {
             GameState::New => {
                 if is_key_pressed(KeyCode::Space) {
                     game_state = GameState::Reset;
@@ -160,7 +158,6 @@ async fn main() {
                     player.rect.y -= 1f32 * frame_time;
                 }
             }
-            _ => {}
         };
 
         // update the player and powerup start
@@ -170,7 +167,7 @@ async fn main() {
 
         // check if the player touched the powerup
         if player.collision(&powerup.rect, false) {
-            speed += 1f32;
+            speed += 2f32;
             next_score += 100f32;
             player.powerup();
             powerup.reset();
@@ -184,7 +181,7 @@ async fn main() {
                 //next_score += 1f32;
                 match player.rect.intersect(asteroid.rect) {
                     Some(rect) => {
-                        flying_emitter_local.draw(vec2(rect.x, rect.y + player.rect.h * 0.5f32));
+                        emitter.draw(vec2(rect.x, rect.y + player.rect.h * 0.5f32));
                         asteroid.hit(player.rect.x - asteroid.rect.x);
                     }
                     None => {}
@@ -193,6 +190,6 @@ async fn main() {
         }
 
         // wait for the next frame
-        next_frame().await
+        next_frame().await;
     }
 }

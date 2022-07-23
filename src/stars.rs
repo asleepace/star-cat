@@ -1,7 +1,5 @@
 use macroquad::prelude::*;
 
-const STAR_SIZE: f32 = 10f32;
-
 fn random_position() -> Rect {
     Rect::new(
         rand::gen_range(0f32, screen_width()),
