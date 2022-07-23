@@ -36,13 +36,14 @@ fn powerup() -> particles::EmitterConfig {
 #[macroquad::main("star-cat")]
 async fn main() {
     let font = load_ttf_font("res/VT323-Regular.ttf").await.unwrap();
+    let cat: Texture2D = load_texture("res/cat_graphic.png").await.unwrap();
     let smoke_texture = Image::gen_image_color(2u16, 2u16, BROWN);
     let texture = Texture2D::from_image(&smoke_texture);
     let powerup_image = Image::gen_image_color(12u16, 12u16, YELLOW);
     let powerup_texture = Texture2D::from_image(&powerup_image);
 
     // instantiate the player
-    let mut player = Player::new();
+    let mut player = Player::new(cat);
     let mut asteroids = Vec::<Asteroid>::new();
     let mut background = Vec::<BackgroundStar>::new();
     let mut star = Star::new();

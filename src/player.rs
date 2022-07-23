@@ -41,10 +41,11 @@ pub struct Player {
     half: f32,
     speed: f32,
     velocity: f32,
+    image: Texture2D,
 }
 
 impl Player {
-    pub fn new() -> Self {
+    pub fn new(texture: Texture2D) -> Self {
         Self {
             rect: Rect::new(
                 screen_width() * 0.5f32 - PLAYER_SIZE,
@@ -55,6 +56,7 @@ impl Player {
             half: PLAYER_SIZE * 0.5f32,
             speed: 200f32,
             velocity: 0f32,
+            image: texture,
         }
     }
     pub fn update(&mut self, delta: f32) {
@@ -118,6 +120,41 @@ impl Player {
     }
 
     pub fn draw(&self) {
-        draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, ORANGE)
+        // draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BLUE);
+        // draw_texture(self.image, self.rect.x, self.rect.y, WHITE);
+
+        draw_texture_ex(
+            self.image,
+            self.rect.x - 13f32,
+            self.rect.y - 6f32,
+            WHITE,
+            DrawTextureParams {
+                dest_size: Some(Vec2::new(75f32, 77.50f32)),
+                flip_x: false,
+                flip_y: false,
+                pivot: None,
+                source: None,
+                rotation: 0f32,
+            },
+        )
+
+        // draw_circle(
+        //     self.rect.x + self.half,
+        //     self.rect.y + self.half,
+        //     self.half,
+        //     ORANGE,
+        // );
+        // draw_circle(
+        //     self.rect.x + self.half + 8f32,
+        //     self.rect.y + self.half - 10f32,
+        //     5f32,
+        //     BLACK,
+        // );
+        // draw_circle(
+        //     self.rect.x + self.half - 8f32,
+        //     self.rect.y + self.half - 10f32,
+        //     5f32,
+        //     BLACK,
+        // );
     }
 }
