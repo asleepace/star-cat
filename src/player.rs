@@ -37,7 +37,7 @@ enum Accelerate {
 }
 
 pub struct Player {
-    rect: Rect,
+    pub rect: Rect,
     half: f32,
     speed: f32,
     velocity: f32,
@@ -117,7 +117,7 @@ impl Player {
         self.draw();
     }
 
-    fn draw(&self) {
+    pub fn draw(&self) {
         draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, ORANGE)
     }
 }
