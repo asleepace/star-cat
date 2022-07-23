@@ -26,7 +26,7 @@ pub struct Player {
     half: f32,
     speed: f32,
     velocity: f32,
-    image: Texture2D,
+    // image: Texture2D,
 }
 
 impl Player {
@@ -41,7 +41,7 @@ impl Player {
             half: PLAYER_SIZE * 0.5f32,
             speed: 200f32,
             velocity: 0f32,
-            image: texture,
+            // image: texture,
         }
     }
 
@@ -66,7 +66,9 @@ impl Player {
             }
             _ => {
                 // allows speed decay
-                self.speed /= DECAY;
+                if self.speed < -0.1 || self.speed > 0.1 {
+                    self.speed /= DECAY;
+                }
             }
         };
 
