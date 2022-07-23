@@ -35,6 +35,29 @@ impl Player {
         }
         self.draw();
     }
+    pub fn collision(&mut self, rect: &Rect) -> bool {
+        // early exit
+        let intersection = match self.rect.intersect(*rect) {
+            Some(intersection) => intersection,
+            None => return false,
+        };
+        let a_center = self.rect.point() + self.rect.size() * 0.5f32;
+        let b_center = rect.point() + rect.size() * 0.5f32;
+        let to = b_center - a_center;
+        let to_signum = to.signum();
+        match intersection.w > intersection.h {
+            true => {
+                // bounce on y
+                self.rect.y -= to_signum.y * intersection.h;
+            }
+            false => {
+                // bounce on x
+                self.rect.x -= to_signum.x * intersection.w;
+            }
+        }
+        self.draw();
+        true
+    }
     fn draw(&self) {
         draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, ORANGE)
     }
