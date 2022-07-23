@@ -2,7 +2,7 @@ use macroquad::prelude::*;
 
 const PLAYER_SIZE: f32 = 50f32;
 const ACCELERATION: f32 = 1.1f32;
-const DECAY: f32 = 1.1f32;
+const DECAY: f32 = 1.08f32;
 const MAX_SPEED: f32 = 800f32;
 
 fn min(a: f32, b: f32) -> f32 {
@@ -66,7 +66,7 @@ impl Player {
             }
             _ => {
                 // allows speed decay
-                self.speed /= ACCELERATION;
+                self.speed /= DECAY;
             }
         };
 
@@ -89,11 +89,6 @@ impl Player {
         self.draw();
     }
     pub fn collision(&mut self, rect: &Rect, draw: bool) -> bool {
-        if rect.y - self.rect.y >= PLAYER_SIZE {
-            return false;
-        }
-
-        // early exit
         let intersection = match self.rect.intersect(*rect) {
             Some(intersection) => intersection,
             None => return false,
