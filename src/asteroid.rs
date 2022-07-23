@@ -33,9 +33,8 @@ impl Asteroid {
             self.rect.x = rand::gen_range(0f32, screen_width());
             self.rect.y = -ASTEROID_SIZE;
         }
-        self.draw();
     }
-    fn draw(&self) {
+    pub fn draw(&self) {
         draw_rectangle(
             self.rect.x,
             self.rect.y,

@@ -1,16 +1,16 @@
 mod asteroid;
-mod background_star;
 mod games;
 mod player;
-mod star;
+mod powerup;
+mod stars;
 
 use asteroid::Asteroid;
-use background_star::BackgroundStar;
 use games::Game;
 use macroquad::prelude::*;
 use macroquad_particles::{self as particles, Emitter, EmitterConfig};
 use player::Player;
-use star::Star;
+use powerup::Powerup;
+use stars::Star;
 const GAME_SPEED: f32 = 200.0;
 
 fn smoke() -> particles::EmitterConfig {
@@ -61,15 +61,15 @@ async fn main() {
     // instantiate the player
     let mut player = Player::new(cat);
     let mut asteroids = Vec::<Asteroid>::new();
-    let mut background = Vec::<BackgroundStar>::new();
-    let mut star = Star::new();
+    let mut background = Vec::<Star>::new();
+    let mut powerup = Powerup::new();
     let mut speed = GAME_SPEED;
     let mut prev_score = 0f32;
     let mut next_score = 0f32;
     let mut tick = 0f32;
     let mut game_state: GameState = GameState::New;
 
-    let mut flying_emitter_local = Emitter::new(EmitterConfig {
+    let mut powerup_effect = Emitter::new(EmitterConfig {
         local_coords: true,
         texture: Some(texture),
         ..smoke()
@@ -77,7 +77,7 @@ async fn main() {
 
     // generate the background
     for _ in 0..100 {
-        background.push(BackgroundStar::new());
+        background.push(Star::new());
     }
 
     // run the game loop
@@ -157,6 +157,7 @@ async fn main() {
                     tick = 0f32;
                     next_score += 1f32;
                     player.rect.y -= 1f32 * frame_time;
+                    println!("{}", get_fps());
                 }
             }
             _ => {}
@@ -164,32 +165,32 @@ async fn main() {
 
         // update the player and powerup start
         player.update(&frame_time);
-        star.update(&speed, &frame_time);
+        powerup.update(&speed, &frame_time);
 
         // check if the player touched the powerup
-        if player.collision(&star.rect, false) {
+        if player.collision(&powerup.rect, false) {
             speed += 1f32;
             next_score += 100f32;
             player.powerup();
-            star.powerup();
+            powerup.reset();
         }
 
         // check if player collided with an asteroid
         for asteroid in asteroids.iter_mut() {
             asteroid.update(&speed, &frame_time);
-            if player.collision(&asteroid.rect, true) {
-                //next_score += 1f32;
-                match player.rect.intersect(asteroid.rect) {
-                    Some(rect) => flying_emitter_local.draw(vec2(rect.x, rect.y)),
-                    None => {}
-                }
-            }
+            player.collision(&asteroid.rect, true);
         }
 
         // display the score during the game
         match game_state {
             GameState::Play => {}
             _ => {}
+        }
+
+        // draw all items
+        powerup.draw();
+        for asteroid in asteroids.iter() {
+            asteroid.draw();
         }
 
         // wait for the next frame

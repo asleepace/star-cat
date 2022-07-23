@@ -11,13 +11,13 @@ fn random_position() -> Rect {
     )
 }
 
-pub struct BackgroundStar {
+pub struct Star {
     pub rect: Rect,
     color: Color,
     speed: f32,
 }
 
-impl BackgroundStar {
+impl Star {
     pub fn new() -> Self {
         let pos = random_position();
         Self {
