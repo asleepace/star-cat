@@ -7,6 +7,7 @@ const PLAYER_SPEED: f32 = 800f32;
 
 struct Player {
     rect: Rect,
+    half: f32,
 }
 
 impl Player {
@@ -18,14 +19,14 @@ impl Player {
                 PLAYER_SIZE,
                 PLAYER_SIZE,
             ),
+            half: PLAYER_SIZE * 0.5f32,
         }
     }
     fn update(&mut self, delta: f32) {
-        let player_half = self.rect.w * 0.5f32;
-        if is_key_down(KeyCode::Right) && self.rect.x + player_half < screen_width() {
+        if is_key_down(KeyCode::Right) && self.rect.x + self.half < screen_width() {
             self.rect.x += PLAYER_SPEED * delta;
         }
-        if is_key_down(KeyCode::Left) && self.rect.y - player_half > 0f32 {
+        if is_key_down(KeyCode::Left) && self.rect.y - self.half > 0f32 {
             self.rect.x -= PLAYER_SPEED * delta
         }
         if self.rect.x < 0f32 {
