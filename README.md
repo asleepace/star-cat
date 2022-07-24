@@ -6,7 +6,11 @@ A simple scrolling game written in Rust!
 
 ## Running
 
-Start a local http server with the following command:
+```
+cargo run
+```
+
+To run on wev start a local http server with the following command:
 
 ```bash
 wasm-pack build --target web
