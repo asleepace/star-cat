@@ -30,7 +30,7 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(texture: Texture2D) -> Self {
+    pub fn new(_texture: Texture2D) -> Self {
         Self {
             rect: Rect::new(
                 screen_width() * 0.5f32 - PLAYER_SIZE,
@@ -66,7 +66,7 @@ impl Player {
             }
             _ => {
                 // allows speed decay
-                if self.speed < -0.1 || self.speed > 0.1 {
+                if self.speed < -100. || self.speed > 100. {
                     self.speed /= DECAY;
                 }
             }
