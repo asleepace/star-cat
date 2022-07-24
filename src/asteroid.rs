@@ -10,8 +10,8 @@ use macroquad::prelude::*;
  *  detection uses a simple square collision for now.
  */
 
-const VELOCITY_DECAY: f32 = 0.99999;
 // MAX_VELOCITY: f32 = 200.0;
+const VELOCITY_DECAY: f32 = 0.99999;
 const ASTEROID_MIN_SIZE: f32 = 100.0;
 const ASTEROID_MAX_SIZE: f32 = 200.0;
 const MIN_EDGES: u8 = 12;
