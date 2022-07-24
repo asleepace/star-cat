@@ -1,3 +1,5 @@
+use crate::asteroid::Asteroid;
+use fast_math::atan2;
 use macroquad::prelude::*;
 
 const PLAYER_SIZE: f32 = 50f32;
@@ -26,6 +28,7 @@ pub struct Player {
     half: f32,
     speed: f32,
     velocity: f32,
+    radius: f32,
     // image: Texture2D,
 }
 
@@ -41,6 +44,7 @@ impl Player {
             half: PLAYER_SIZE * 0.5f32,
             speed: 200f32,
             velocity: 0f32,
+            radius: PLAYER_SIZE * 0.5f32,
             // image: texture,
         }
     }
@@ -115,6 +119,33 @@ impl Player {
         true
     }
 
+    /** detect collisions with asteroids based on radii */
+    pub fn hit(&mut self, x: f32, y: f32, radius: f32) -> bool {
+        let dx: f32 = (self.rect.x + self.radius) - (x + radius);
+        let dy: f32 = (self.rect.y + self.radius) - (y + radius);
+        let diameter: f32 = self.radius + radius;
+        let distance: f32 = (dx * dx + dy * dy).sqrt();
+        let collision = distance < diameter;
+        return distance < diameter;
+    }
+
+    pub fn collide(&mut self, asteroid: &Asteroid) -> bool {
+        let dx: f32 = (self.rect.x + self.radius) - (asteroid.x + asteroid.radius);
+        let dy: f32 = (self.rect.y + self.radius) - (asteroid.y + asteroid.radius);
+        let diameter: f32 = self.radius + asteroid.radius;
+        let distance: f32 = (dx * dx + dy * dy).sqrt();
+        let collision = distance < diameter;
+
+        if collision {
+            let angle = atan2(dy, dx);
+            let move_by = diameter - distance;
+            self.rect.x += angle.cos() * move_by;
+            self.rect.y += angle.sin() * move_by;
+        }
+
+        return distance < diameter;
+    }
+
     pub fn did_lose(&mut self) -> bool {
         self.rect.y > screen_height()
     }
@@ -129,7 +160,7 @@ impl Player {
     }
 
     pub fn draw(&self) {
-        // draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BLUE);
+        draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BLUE);
         // draw_texture(self.image, self.rect.x, self.rect.y, WHITE);
 
         // draw_texture_ex(
@@ -150,7 +181,7 @@ impl Player {
         draw_circle(
             self.rect.x + self.half,
             self.rect.y + self.half,
-            self.half,
+            self.radius,
             ORANGE,
         );
         // draw_circle(

@@ -177,15 +177,15 @@ async fn main() {
         for asteroid in asteroids.iter_mut() {
             asteroid.update(&speed, &frame_time);
             asteroid.draw();
-            if player.collision(&asteroid.rect, true) {
+            if player.collide(&asteroid) {
                 //next_score += 1f32;
-                match player.rect.intersect(asteroid.rect) {
-                    Some(rect) => {
-                        emitter.draw(vec2(rect.x, rect.y + player.rect.h * 0.5f32));
-                        asteroid.hit(player.rect.x - asteroid.rect.x);
-                    }
-                    None => {}
-                }
+                // match player.rect.intersect(asteroid.rect) {
+                //     Some(rect) => {
+                //         emitter.draw(vec2(rect.x, rect.y + player.rect.h * 0.5f32));
+                //         asteroid.hit(player.rect.x - asteroid.x);
+                //     }
+                //     None => {}
+                // }
             }
         }
 

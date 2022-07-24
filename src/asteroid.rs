@@ -38,24 +38,28 @@ pub fn get_random_asteroid(y: u32) -> Asteroid {
     let start_y = rand::gen_range(size, screen_height()) + offset;
     Asteroid {
         color: Color::from_rgba(110u8, 67u8, 24u8, 255u8),
-        rect: Rect::new(start_x, -start_y, size, size),
         spin: rand::gen_range(SPIN_MIN, SPIN_MAX),
         side: rand::gen_range(MIN_EDGES, MAX_EDGES),
         velocity: rand::gen_range(-10f32, 10f32),
         texture: get_textures(size),
+        radius: size * 0.5f32,
         size: size,
+        x: start_x,
+        y: -start_y,
         id: y,
     }
 }
 
 pub struct Asteroid {
-    pub rect: Rect,
     pub side: u8,
     pub size: f32,
     pub spin: f32,
     pub color: Color,
     pub velocity: f32,
+    pub radius: f32,
     pub id: u32,
+    pub x: f32,
+    pub y: f32,
     texture: Vec<Rect>,
 }
 
@@ -71,26 +75,28 @@ impl Asteroid {
 
     pub fn reset(&mut self) {
         let next = get_random_asteroid(self.id);
-        self.rect = next.rect;
         self.side = next.side;
         self.size = next.size;
         self.spin = next.spin;
         self.color = next.color;
         self.velocity = next.velocity;
         self.texture = next.texture;
+        self.x = next.x;
+        self.y = next.y;
+        self.radius = next.radius;
     }
 
     pub fn update(&mut self, speed: &f32, delta: &f32) {
-        self.rect.y += speed * delta;
-        self.rect.x += self.velocity * delta;
-        if self.rect.y > screen_height() + self.size {
+        self.y += speed * delta;
+        self.x += self.velocity * delta;
+        if self.y > screen_height() + self.size {
             self.reset();
         }
-        if self.rect.x > screen_width() {
-            self.rect.x = -self.size;
+        if self.x > screen_width() {
+            self.x = -self.size;
         }
-        if self.rect.x + self.size < 0f32 {
-            self.rect.x = screen_width();
+        if self.x + self.size < 0f32 {
+            self.x = screen_width();
         }
         if self.velocity < -1f32 || self.velocity > 1f32 {
             self.velocity *= VELOCITY_DECAY;
@@ -98,33 +104,26 @@ impl Asteroid {
     }
 
     pub fn draw(&self) {
-        draw_rectangle(
-            self.rect.x,
-            self.rect.y,
-            self.rect.w,
-            self.rect.h,
-            self.color,
-        );
+        // draw_rectangle(self.x, self.y, self.size, self.size, self.color);
         draw_poly(
-            self.rect.x + (self.size / 2f32),
-            self.rect.y + (self.size / 2f32),
+            self.x + self.radius,
+            self.y + self.radius,
             self.side,
-            self.size / 1.5f32,
+            self.radius,
             self.spin,
             self.color,
         );
         for texture in self.texture.iter() {
             let radius = texture.w * 0.2f32;
-            let x = self.rect.x + texture.x;
+            let x = self.x + texture.x;
             draw_poly(
                 x + radius,
-                texture.y + self.rect.y + radius,
+                texture.y + self.y + radius,
                 8u8,
                 radius,
                 0f32,
                 Color::from_rgba(88u8, 54u8, 19u8, 255u8),
             );
         }
-        //draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BROWN);
     }
 }
