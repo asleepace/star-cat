@@ -4,9 +4,9 @@ use fast_math::atan2;
 use macroquad::prelude::*;
 
 const PLAYER_SIZE: f32 = 50f32;
-const ACCELERATION: f32 = 20.0f32;
-const MAX_ACELERATION: f32 = 400.0f32;
-const DECAY: f32 = 1.08f32;
+const ACCELERATION: f32 = 200.0f32;
+const MAX_ACELERATION: f32 = 600.0f32;
+const DECAY: f32 = 1.05f32;
 const MAX_SPEED: f32 = 800f32;
 
 fn min(a: f32, b: f32) -> f32 {
@@ -88,7 +88,7 @@ impl Player {
                     //     self.acceleration -= ACCELERATION;
                     // }
                     // // allows speed decay
-                    // self.speed /= DECAY;
+                    self.acceleration /= DECAY;
                 }
             };
         }
@@ -159,8 +159,8 @@ impl Player {
             let move_by = diameter - distance;
             self.rect.x += angle.cos() * move_by;
             self.rect.y += angle.sin() * move_by;
-            self.did_collide = 3.;
-            self.velocity *= -1.;
+            self.did_collide = 1.;
+            self.acceleration *= -0.5;
         }
 
         return distance < diameter;

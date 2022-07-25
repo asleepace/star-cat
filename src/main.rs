@@ -178,6 +178,7 @@ async fn main() {
             asteroid.update(&speed, &frame_time);
             asteroid.draw();
             if player.collide(&asteroid) {
+                asteroid.hit(player.rect.x - asteroid.x);
                 //next_score += 1f32;
                 // match player.rect.intersect(asteroid.rect) {
                 //     Some(rect) => {
