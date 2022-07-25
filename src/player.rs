@@ -1,9 +1,11 @@
 use crate::asteroid::Asteroid;
+use crate::Circle;
 use fast_math::atan2;
 use macroquad::prelude::*;
 
 const PLAYER_SIZE: f32 = 50f32;
-const ACCELERATION: f32 = 1.1f32;
+const ACCELERATION: f32 = 20.0f32;
+const MAX_ACELERATION: f32 = 400.0f32;
 const DECAY: f32 = 1.08f32;
 const MAX_SPEED: f32 = 800f32;
 
@@ -29,6 +31,8 @@ pub struct Player {
     speed: f32,
     velocity: f32,
     radius: f32,
+    did_collide: f32,
+    acceleration: f32,
     // image: Texture2D,
 }
 
@@ -45,6 +49,8 @@ impl Player {
             speed: 200f32,
             velocity: 0f32,
             radius: PLAYER_SIZE * 0.5f32,
+            did_collide: 0.,
+            acceleration: 0.,
             // image: texture,
         }
     }
@@ -58,23 +64,43 @@ impl Player {
     }
 
     pub fn update(&mut self, delta: &f32) {
+        if self.did_collide > 0. {
+            self.did_collide -= 1.;
+        }
         // check for user input and update speed and velocity
-        let _ = match (is_key_down(KeyCode::Right), is_key_down(KeyCode::Left)) {
-            (true, false) => {
-                self.speed *= 1f32 + ACCELERATION;
-                self.velocity = 1f32;
-            }
-            (false, true) => {
-                self.speed *= 1f32 + ACCELERATION;
-                self.velocity = -1f32;
-            }
-            _ => {
-                // allows speed decay
-                if self.speed < -100. || self.speed > 100. {
-                    self.speed /= DECAY;
+        if self.did_collide <= 0. {
+            let _ = match (is_key_down(KeyCode::Right), is_key_down(KeyCode::Left)) {
+                (true, false) => {
+                    self.acceleration += ACCELERATION;
+                    // self.speed *= self.acceleration;
+                    // self.velocity = 1f32;
                 }
-            }
-        };
+                (false, true) => {
+                    self.acceleration -= ACCELERATION;
+                    // self.speed *= 1f32 + ACCELERATION;
+                    // self.velocity = -1f32;
+                }
+                _ => {
+                    // if self.acceleration < 0. {
+                    //     self.acceleration += ACCELERATION;
+                    // }
+                    // if self.acceleration > 0. {
+                    //     self.acceleration -= ACCELERATION;
+                    // }
+                    // // allows speed decay
+                    // self.speed /= DECAY;
+                }
+            };
+        }
+
+        if self.acceleration > MAX_ACELERATION {
+            self.acceleration = MAX_ACELERATION;
+        }
+        if self.acceleration < -MAX_ACELERATION {
+            self.acceleration = -MAX_ACELERATION;
+        }
+
+        // self.speed += self.acceleration;
 
         // allow player to slow down
 
@@ -87,13 +113,14 @@ impl Player {
         self.speed = min(self.speed, MAX_SPEED);
 
         // move the players x coordinate
-        self.rect.x += self.speed * delta * self.velocity;
+        self.rect.x += self.acceleration * delta; // * self.velocity;
 
         // check screen boundries and draw
         self.rect.x = min(self.rect.x, screen_width() - self.rect.w);
         self.rect.x = max(self.rect.x, 0f32);
         self.draw();
     }
+
     pub fn collision(&mut self, rect: &Rect, draw: bool) -> bool {
         let intersection = match self.rect.intersect(*rect) {
             Some(intersection) => intersection,
@@ -120,15 +147,6 @@ impl Player {
     }
 
     /** detect collisions with asteroids based on radii */
-    pub fn hit(&mut self, x: f32, y: f32, radius: f32) -> bool {
-        let dx: f32 = (self.rect.x + self.radius) - (x + radius);
-        let dy: f32 = (self.rect.y + self.radius) - (y + radius);
-        let diameter: f32 = self.radius + radius;
-        let distance: f32 = (dx * dx + dy * dy).sqrt();
-        let collision = distance < diameter;
-        return distance < diameter;
-    }
-
     pub fn collide(&mut self, asteroid: &Asteroid) -> bool {
         let dx: f32 = (self.rect.x + self.radius) - (asteroid.x + asteroid.radius);
         let dy: f32 = (self.rect.y + self.radius) - (asteroid.y + asteroid.radius);
@@ -141,6 +159,8 @@ impl Player {
             let move_by = diameter - distance;
             self.rect.x += angle.cos() * move_by;
             self.rect.y += angle.sin() * move_by;
+            self.did_collide = 3.;
+            self.velocity *= -1.;
         }
 
         return distance < diameter;
@@ -160,7 +180,7 @@ impl Player {
     }
 
     pub fn draw(&self) {
-        draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BLUE);
+        // draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BLUE);
         // draw_texture(self.image, self.rect.x, self.rect.y, WHITE);
 
         // draw_texture_ex(
