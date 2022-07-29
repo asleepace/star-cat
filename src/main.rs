@@ -1,4 +1,5 @@
 mod asteroid;
+mod circle;
 mod player;
 mod powerup;
 mod stars;
@@ -67,6 +68,7 @@ async fn main() {
     let mut next_score = 0f32;
     let mut tick = 0f32;
     let mut game_state: GameState = GameState::New;
+    let mut index: usize = 0;
 
     let mut emitter = Emitter::new(EmitterConfig {
         local_coords: true,
@@ -173,12 +175,46 @@ async fn main() {
             powerup.reset();
         }
 
+        // create clone
+        if index > asteroids.len() {
+            index = 0;
+        }
+
+        let length = asteroids.len();
+        let collisions: &mut Vec<Option<Vec2>> = &mut vec![None; asteroids.len()];
+        for (i, asteroid_one) in asteroids.iter().enumerate() {
+            for (j, asteroid_two) in asteroids.iter().enumerate() {
+                // skip same index
+                if i <= j {
+                    continue;
+                }
+                match asteroid_one.collide(asteroid_two.get_circle()) {
+                    Some(vec) => {
+                        collisions[i] = Some(vec);
+                        collisions[j] = Some(-vec);
+                    }
+                    None => {}
+                }
+            }
+        }
+
         // check if player collided with an asteroid
-        for asteroid in asteroids.iter_mut() {
+        for (i, asteroid) in asteroids.iter_mut().enumerate() {
+            match collisions[i] {
+                Some(vec) => {
+                    // asteroid.x += vec.x;
+                    // asteroid.y += vec.y;
+                    // asteroid.velocity = -asteroid.velocity;
+                }
+                None => {}
+            }
+
             asteroid.update(&speed, &frame_time);
             asteroid.draw();
             if player.collide(&asteroid) {
-                asteroid.hit(player.rect.x - asteroid.x);
+                asteroid.hit(-player.acceleration);
+
+                //asteroid.velocity = -player.acceleration;
                 //next_score += 1f32;
                 // match player.rect.intersect(asteroid.rect) {
                 //     Some(rect) => {
@@ -188,6 +224,7 @@ async fn main() {
                 //     None => {}
                 // }
             }
+            // asteroid to asteroid
         }
 
         // wait for the next frame

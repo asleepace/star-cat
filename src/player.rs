@@ -27,12 +27,13 @@ fn max(a: f32, b: f32) -> f32 {
 
 pub struct Player {
     pub rect: Rect,
+    pub area: Circle,
     half: f32,
     speed: f32,
     velocity: f32,
     radius: f32,
     did_collide: f32,
-    acceleration: f32,
+    pub acceleration: f32,
     // image: Texture2D,
 }
 
@@ -45,6 +46,11 @@ impl Player {
                 PLAYER_SIZE,
                 PLAYER_SIZE,
             ),
+            area: Circle {
+                x: screen_width() * 0.5f32 - PLAYER_SIZE,
+                y: screen_height() - 100f32,
+                r: PLAYER_SIZE * 0.5,
+            },
             half: PLAYER_SIZE * 0.5f32,
             speed: 200f32,
             velocity: 0f32,
@@ -199,22 +205,10 @@ impl Player {
         // )
 
         draw_circle(
-            self.rect.x + self.half,
-            self.rect.y + self.half,
+            self.rect.x + self.radius,
+            self.rect.y + self.radius,
             self.radius,
             ORANGE,
         );
-        // draw_circle(
-        //     self.rect.x + self.half + 8f32,
-        //     self.rect.y + self.half - 10f32,
-        //     5f32,
-        //     BLACK,
-        // );
-        // draw_circle(
-        //     self.rect.x + self.half - 8f32,
-        //     self.rect.y + self.half - 10f32,
-        //     5f32,
-        //     BLACK,
-        // );
     }
 }

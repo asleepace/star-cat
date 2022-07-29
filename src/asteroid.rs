@@ -1,6 +1,7 @@
-use std::f32::consts::PI;
-
+use crate::circle::Circle;
+use fast_math::atan2;
 use macroquad::prelude::*;
+use std::f32::consts::PI;
 
 /**
  *  Asteroid
@@ -13,7 +14,7 @@ use macroquad::prelude::*;
 const VELOCITY_DECAY: f32 = 0.99999;
 // MAX_VELOCITY: f32 = 200.0;
 const ASTEROID_MIN_SIZE: f32 = 100.0;
-const ASTEROID_MAX_SIZE: f32 = 200.0;
+const ASTEROID_MAX_SIZE: f32 = 400.0;
 const MIN_EDGES: u8 = 12;
 const MAX_EDGES: u8 = 18;
 const SPIN_MIN: f32 = 0.0;
@@ -70,7 +71,8 @@ impl Asteroid {
     }
 
     pub fn hit(&mut self, speed: f32) {
-        self.velocity -= speed / self.size;
+        self.velocity += speed * get_frame_time();
+        //self.velocity -= speed / self.size * 2.;
     }
 
     pub fn reset(&mut self) {
@@ -79,7 +81,7 @@ impl Asteroid {
         self.size = next.size;
         self.spin = next.spin;
         self.color = next.color;
-        self.velocity = next.velocity;
+        // self.velocity = next.velocity;
         self.texture = next.texture;
         self.x = next.x;
         self.y = next.y;
@@ -90,21 +92,58 @@ impl Asteroid {
         self.y += speed * delta;
         self.x += self.velocity * delta;
         if self.y > screen_height() + self.size {
-            self.reset();
+            self.y = -rand::gen_range(self.size, screen_height());
         }
         if self.x > screen_width() {
             self.x = -self.size;
         }
         if self.x + self.size < 0f32 {
-            self.x = screen_width();
+            self.x = screen_width() + self.size;
         }
         if self.velocity < -1f32 || self.velocity > 1f32 {
             self.velocity *= VELOCITY_DECAY;
         }
     }
 
+    pub fn get_circle(&self) -> Circle {
+        Circle {
+            x: self.x + self.radius,
+            y: self.y + self.radius,
+            radius: self.radius,
+        }
+    }
+
+    pub fn collide(&self, asteroid: Circle) -> Option<Vec2> {
+        let current = self.get_circle();
+
+        let diameter: f32 = current.radius + asteroid.radius;
+
+        let dx: f32 = (current.x + current.radius * 2.) - (asteroid.x + asteroid.radius);
+        let dy: f32 = (current.x + current.radius * 2.) - (asteroid.x + asteroid.radius);
+        let distance: f32 = (dx * dx + dy * dy).sqrt();
+        match distance < diameter {
+            true => {
+                println!(
+                    "{:?}",
+                    (
+                        (current.x, asteroid.y),
+                        (current.y, asteroid.y),
+                        (current.radius, asteroid.radius)
+                    )
+                );
+                let angle = atan2(dy, dx);
+                let move_by = diameter - distance;
+                let x = move_by * angle.cos();
+                let y = move_by * angle.sin();
+                let vec = Vec2::new(x, y);
+                Some(vec)
+            }
+            false => None,
+        }
+    }
+
     pub fn draw(&self) {
-        // draw_rectangle(self.x, self.y, self.size, self.size, self.color);
+        //  draw_rectangle(self.x, self.y, self.size, self.size, self.color);
         draw_poly(
             self.x + self.radius,
             self.y + self.radius,
