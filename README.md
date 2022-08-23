@@ -6,6 +6,8 @@ A simple scrolling game written in Rust!
 
 ## Build
 
+from https://github.com/not-fl3/macroquad/issues/5
+
 - Clone https://github.com/not-fl3/macroquad-sampl`e-project
 - run `cargo build --target wasm32-unknown-unknown
 - copy wasm to www folder: `cp target/wasm32-unknown-unknown/debug/macroquad_sample_project.wasm www`
