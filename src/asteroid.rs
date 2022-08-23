@@ -123,14 +123,14 @@ impl Asteroid {
         let distance: f32 = (dx * dx + dy * dy).sqrt();
         match distance < diameter {
             true => {
-                println!(
-                    "{:?}",
-                    (
-                        (current.x, asteroid.y),
-                        (current.y, asteroid.y),
-                        (current.radius, asteroid.radius)
-                    )
-                );
+                // println!(
+                //     "{:?}",
+                //     (
+                //         (current.x, asteroid.y),
+                //         (current.y, asteroid.y),
+                //         (current.radius, asteroid.radius)
+                //     )
+                // );
                 let angle = atan2(dy, dx);
                 let move_by = diameter - distance;
                 let x = move_by * angle.cos();
