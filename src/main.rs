@@ -49,7 +49,7 @@ enum GameState {
     GameOver,
 }
 
-#[macroquad::main("main")]
+#[macroquad::main("mainStarCat")]
 async fn main() {
     // initialize and load graphical assets
     let font = load_ttf_font("res/VT323-Regular.ttf").await.unwrap();

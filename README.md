@@ -13,6 +13,29 @@ from https://github.com/not-fl3/macroquad/issues/5
 - copy wasm to www folder: `cp target/wasm32-unknown-unknown/debug/macroquad_sample_project.wasm www`
 - serve www folder content with any wasm-mime compatible webserver, like `cd www && basic-http-server .`
 
+To generate the wasm file run the following:
+
+```bash
+cargo build --target wasm32-unknown-unknown
+cp target/wasm32-unknown-unknown/debug/star-cat.wasm www
+```
+
+To generate the javascript file run the following:
+
+```bash
+cat miniquad/native/sapp-wasm/js/gl.js >> mq_js_bundle.js
+cat macroquad/js/audio.js >> mq_js_bundle.js
+cat sapp-jsutils/js/sapp_jsutils.js >> mq_js_bundle.js
+cat quad-net/js/quad-net.js >> mq_js_bundle.js
+minify mq_js_bundle.js
+```
+
+To run in the browser:
+
+```bash
+cd www && basic-http-server .
+```
+
 ## Running
 
 ```
