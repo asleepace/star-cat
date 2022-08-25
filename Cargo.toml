@@ -1,11 +1,12 @@
 [package]
 name = "star-cat"
 version = "1.0.0"
-edition = "2022"
+edition = "2021"
 
 [dependencies]
 macroquad = "0.3"
 macroquad-particles = "0.1.1"
+miniquad = { version = "=0.3.11", features = ["log-impl"] }
 fast-math = "0.1"
 
 [profile.dev.package.'*']
