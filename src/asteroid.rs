@@ -2,6 +2,7 @@ use macroquad::prelude::*;
 
 const ASTEROID_SIZE: f32 = 100f32;
 
+#[derive(Clone)]
 pub struct Asteroid {
     pub rect: Rect,
     pub side: u8,

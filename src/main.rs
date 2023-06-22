@@ -85,6 +85,13 @@ async fn main() {
     loop {
         let frame_time = get_frame_time();
 
+        let frame_per_second = get_fps();
+        let fps_lock_60 = 1. / 60.;
+        let fps_diff_60 = fps_lock_60 - frame_time;
+
+        println!("60 fps: {}", fps_lock_60);
+        println!("Fps diff: {}", fps_diff_60);
+
         // clear background and paint background stars first
         clear_background(BLACK);
         for bg_star in background.iter_mut() {
@@ -92,7 +99,7 @@ async fn main() {
         }
 
         // handle various game states
-        &match game_state {
+        let _ = &match game_state {
             GameState::New => {
                 if is_key_pressed(KeyCode::Space) {
                     game_state = GameState::Reset;
@@ -140,6 +147,9 @@ async fn main() {
                 // output the score on the scren
                 let score_text = format!("SCORE: {}", prev_score);
                 display_text(&font, &score_text, 40, 0.0, 40.0);
+
+                let fps_text = format!("FPS: {}", get_fps());
+                display_text(&font, &fps_text, 40, 300.0, 40.0);
 
                 // check win and loss conditions
                 match player.did_win() || player.did_lose() {
