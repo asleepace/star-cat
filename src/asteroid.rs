@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-const ASTEROID_SIZE: f32 = 100f32;
+// const ASTEROID_SIZE: f32 = 100f32;
 
 pub struct Asteroid {
     pub rect: Rect,

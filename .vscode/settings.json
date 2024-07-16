@@ -1,6 +1,26 @@
 {
   "editor.tabSize": 2,
   "[rust]": {
-    "editor.semanticHighlighting.enabled": false
-  }
+    "editor.semanticHighlighting.enabled": false,
+  },
+  "cSpell.ignoreWords": [
+    "serde",
+    "serde_json",
+    "serde_derive",
+    "tokio",
+    "actix",
+    "actix_web",
+    "actix_rt",
+    "actix_service",
+    "actix_http",
+    "actix_codec",
+    "actix_utils",
+    "actix_router",
+    "signum",
+    "macroquad",
+    "Powerup",
+    "Powerup",
+    "powerups",
+    "actix",
+  ]
 }

@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-const STAR_SIZE: f32 = 10f32;
+const _STAR_SIZE: f32 = 10f32;
 
 fn random_position() -> Rect {
     Rect::new(

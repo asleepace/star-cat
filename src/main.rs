@@ -5,7 +5,6 @@ mod powerup;
 mod stars;
 
 use asteroid::Asteroid;
-use games::Game;
 use macroquad::prelude::*;
 use macroquad_particles::{self as particles, Emitter, EmitterConfig};
 use player::Player;
@@ -53,7 +52,16 @@ enum GameState {
 #[macroquad::main("star-cat")]
 async fn main() {
     // initialize and load graphical assets
-    let font = load_ttf_font("res/VT323-Regular.ttf").await.unwrap();
+
+    let font = match load_ttf_font("res/VT323-Regular.ttf").await {
+        Ok(font) => font,
+        Err(e) => {
+            println!("Error loading font: {:?}", e);
+            return;
+        }
+    };
+
+    // let font = load_ttf_font("res/VT323-Regular.ttf").await.unwrap();
     let cat: Texture2D = load_texture("res/cat_graphic.png").await.unwrap();
     let brown = Color::from_rgba(110u8, 67u8, 24u8, 200u8);
     let smoke_texture = Image::gen_image_color(2u16, 2u16, brown);
@@ -92,7 +100,7 @@ async fn main() {
         }
 
         // handle various game states
-        &match game_state {
+        let _ = &match game_state {
             GameState::New => {
                 if is_key_pressed(KeyCode::Space) {
                     game_state = GameState::Reset;
@@ -137,17 +145,17 @@ async fn main() {
                 }
             }
             GameState::Play => {
-                // output the score on the scren
+                // output the score on the screen
                 let score_text = format!("SCORE: {}", prev_score);
                 display_text(&font, &score_text, 40, 0.0, 40.0);
 
                 // check win and loss conditions
                 match player.did_win() || player.did_lose() {
                     true => game_state = GameState::GameOver,
-                    _ => {}
+                    false => {},
                 }
 
-                // incrament difference between scores
+                // increment difference between scores
                 if prev_score < next_score {
                     prev_score += 1f32;
                 }
@@ -160,7 +168,6 @@ async fn main() {
                     player.rect.y -= 1f32 * frame_time;
                 }
             }
-            _ => {}
         };
 
         // update the player and powerup start
@@ -184,7 +191,7 @@ async fn main() {
                 //next_score += 1f32;
                 match player.rect.intersect(asteroid.rect) {
                     Some(rect) => {
-                        let direction = if player.rect.x < asteroid.rect.x {
+                        let _direction = if player.rect.x < asteroid.rect.x {
                             -1.2f32
                         } else {
                             1.2f32

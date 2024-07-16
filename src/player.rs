@@ -26,7 +26,7 @@ pub struct Player {
     half: f32,
     speed: f32,
     velocity: f32,
-    image: Texture2D,
+    _image: Texture2D,
 }
 
 impl Player {
@@ -41,7 +41,7 @@ impl Player {
             half: PLAYER_SIZE * 0.5f32,
             speed: 200f32,
             velocity: 0f32,
-            image: texture,
+            _image: texture,
         }
     }
 
@@ -76,14 +76,14 @@ impl Player {
             return self.draw();
         }
 
-        // check speed boundries
+        // check speed boundaries
         self.speed = max(self.speed, -MAX_SPEED);
         self.speed = min(self.speed, MAX_SPEED);
 
         // move the players x coordinate
         self.rect.x += self.speed * delta * self.velocity;
 
-        // check screen boundries and draw
+        // check screen boundaries and draw
         self.rect.x = min(self.rect.x, screen_width() - self.rect.w);
         self.rect.x = max(self.rect.x, 0f32);
         self.draw();
