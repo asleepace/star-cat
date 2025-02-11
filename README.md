@@ -5,14 +5,16 @@ A simple scrolling game written in Rust!
 ## Quick Start 
 
 ```bash
-# download the project
+# Step 1: Install Rust
+
+# Step 2: Cone the project
 git clone https://github.com/asleepace/star-cat.git
 
-# build and run the game
+# Step 3: Build, run and play!
 cargo run
 ```
 
-## Running
+## Build WASM Binary (WiP)
 
 Start a local http server with the following command:
 
