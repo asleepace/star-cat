@@ -1,10 +1,17 @@
-# Start Cat
+# Start Cat 😺🚀
 
 A simple scrolling game written in Rust!
 
 | Example Gameplay |
 |------------------|
 |<video alt="Gameplay" src="https://github.com/user-attachments/assets/e39c3dd3-8532-4943-9956-700fbe3f5ad4" />|
+
+## Gameplay Controls
+
+- ↔️ Use arrow keys to move
+- ⭐️ Collect stars to accelorate forward
+- ☄️ Surf, grind and dodge asteroids
+- 🏆 Reach top to win!
 
 ## Quick Start 
 
