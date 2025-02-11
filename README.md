@@ -2,6 +2,10 @@
 
 A simple scrolling game written in Rust!
 
+| Example Gameplay |
+|------------------|
+|<video alt="Gameplay" src="https://github.com/user-attachments/assets/e39c3dd3-8532-4943-9956-700fbe3f5ad4" />|
+
 ## Quick Start 
 
 ```bash
