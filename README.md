@@ -45,8 +45,18 @@ now it should be running at http://localhost:8080!
 Run the following command to create the WASM binary:
 
 ```bash
+# build for web
 wasm-pack build --target web
-cd www && npm run start
+
+# navigate to pkg directory for web project
+cd pkg
+
+# install serve
+npm install serve --save-dev
+npm start
+
+# run the game
+serve .
 ```
 
 ## Resources
@@ -54,3 +64,7 @@ cd www && npm run start
 - [Rust Canvas](https://rustwasm.github.io/wasm-bindgen/examples/2d-canvas.html)
 - [Rust + WASM Hello, world!](https://rustwasm.github.io/docs/book/game-of-life/hello-world.html)
 - [Comiling Rust to WASM](https://developer.mozilla.org/en-US/docs/WebAssembly/Rust_to_wasm)
+
+## Troubleshooting
+
+- [WASM Bindgen Discussions "env"](https://github.com/rustwasm/wasm-bindgen/discussions/3500)

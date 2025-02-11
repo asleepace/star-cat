@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>StarCat</title>
+    <style>
+      html,
+      body {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          overflow: hidden;
+      }
+
+      #glcanvas {
+          padding-right: 0;
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+      }
+
+      body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #000000;
+      }
+
+      canvas {
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+  </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <canvas id="glcanvas"></canvas>
+    <script type="module">
+      import init from './pkg/star_cat.js';
+      
+      async function run() {
+          try {
+              await init();
+              console.log("WASM initialized successfully!");
+          } catch (err) {
+              console.error("Failed to initialize WASM:", err);
+          }
+      }
+
+      window.onload = run;
+
+      // start();
+  </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "star-cat",
+  "version": "1.0.0",
+  "description": "A simple scrolling game written in Rust",
+  "type": "module",
+  "scripts": {
+    "start": "serve .",
+    "build": "wasm-pack build --target web",
+    "dev": "npm run build && npm start",
+    "rust:install": "cargo install --path ."
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}
