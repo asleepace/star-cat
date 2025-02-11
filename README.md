@@ -4,7 +4,8 @@ A simple scrolling game written in [Rust](https://www.rust-lang.org/tools/instal
 
 | Example Gameplay |
 |------------------|
-|<video alt="Gameplay" src="https://github.com/user-attachments/assets/e39c3dd3-8532-4943-9956-700fbe3f5ad4" />|
+|<video src="https://github.com/user-attachments/assets/d66ffdbc-aea8-43cd-9528-aa4eb14f51f8" />|
+
 
 ## Gameplay Controls
 
