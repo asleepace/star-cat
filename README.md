@@ -1,6 +1,6 @@
 # Start Cat 😺🚀
 
-A simple scrolling game written in Rust!
+A simple scrolling game written in [Rust](https://www.rust-lang.org/tools/install)!
 
 | Example Gameplay |
 |------------------|
