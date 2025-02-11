@@ -1,7 +1,7 @@
-
-use crate::asteroid::Asteroid;
 use macroquad::prelude::*;
 use macroquad_particles::{self as particles, Emitter, EmitterConfig};
+
+use crate::asteroid::Asteroid;
 use crate::player::Player;
 use crate::powerup::Powerup;
 use crate::stars::Star;
@@ -13,7 +13,7 @@ fn smoke() -> particles::EmitterConfig {
     particles::EmitterConfig {
         lifetime: 0.8,
         amount: 20,
-        initial_direction: vec2((270f32).sin(), (270f32).cos()),
+        initial_direction: glam::Vec2::new((270.0f32).sin(), (270.0f32).cos()),
         initial_direction_spread: 0.8f32,
         size: 2f32,
         ..Default::default()
@@ -21,7 +21,7 @@ fn smoke() -> particles::EmitterConfig {
 }
 
 fn display_text(font: &Font, text: &str, size: u16, x: f32, y: f32) {
-    let text_dim = measure_text(&text, Some(*font), size, 1.0);
+    let text_dim = measure_text(&text, Some(&font.clone()), size, 1.0);
     let x_pos = screen_width() * 0.5f32 - text_dim.width * 0.5f32 - x;
     let y_pos = text_dim.height * 0.5f32 + y;
     draw_text_ex(
@@ -29,7 +29,7 @@ fn display_text(font: &Font, text: &str, size: u16, x: f32, y: f32) {
         x_pos,
         y_pos,
         TextParams {
-            font: *font,
+            font: Some(&font.clone()),
             font_size: size,
             color: WHITE,
             ..Default::default()
@@ -190,7 +190,7 @@ pub async fn main() {
                         } else {
                             1.2f32
                         };
-                        flying_emitter_local.draw(vec2(rect.x, rect.y));
+                        flying_emitter_local.draw(Vec2::new(rect.x, rect.y));
                         asteroid.hit(player.rect.x - asteroid.rect.x);
                     }
                     None => {}
