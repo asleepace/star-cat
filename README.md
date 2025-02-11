@@ -6,6 +6,7 @@ A simple scrolling game written in Rust!
 
 ```bash
 # Step 1: Install Rust
+# https://www.rust-lang.org/tools/install
 
 # Step 2: Cone the project
 git clone https://github.com/asleepace/star-cat.git
