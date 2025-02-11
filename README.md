@@ -1,6 +1,8 @@
 # Start Cat 😺🚀
 
-A simple scrolling game written in [Rust](https://www.rust-lang.org/tools/install)!
+A simple scrolling game written in **Rust**!
+
+[Version 2.0 - Latest Release](https://github.com/asleepace/star-cat/releases/tag/v2.0)
 
 | Example Gameplay |
 |------------------|
